@@ -42,7 +42,6 @@ class MyxAODAnalysis : public EL::AnaAlgorithm
   int m_evtNr;
   int M11_evntNum;
   int M14_evntNum;
-
   int noUpsi;
   int oneUpsi;
   int twoUpsi;
