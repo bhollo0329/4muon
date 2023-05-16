@@ -34,9 +34,7 @@ job.sampleHandler( sh )
 job.options().setDouble( ROOT.EL.Job.optMaxEvents, 70000 )
 job.options().setString( ROOT.EL.Job.optSubmitDirMode, 'unique-link')
 
-
 from MyAnalysis.TriggerAnalysisSequence import makeTriggerAnalysisSequence
-
 algSeq = makeTriggerAnalysisSequence( dataType )
 
 for alg in algSeq:
