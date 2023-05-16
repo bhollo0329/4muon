@@ -900,28 +900,24 @@ StatusCode MyxAODAnalysis :: finalize ()
       pEff_M11->SetTitle("HLT_M11 Quad pT Efficiency");
       pFile.WriteTObject(pEff_M11, "pEff_M11");
     }
-  
   if (TEfficiency::CheckConsistency( *hist("passM14_pT"), *hist("total_pT") ))
     {
       pEff_M14 = new TEfficiency( *hist("passM14_pT"), *hist("total_pT") );
       pEff_M14->SetTitle("HLT_M14 Quad pT Efficiency");
       pFile.WriteTObject(pEff_M14, "pEff_M14");
     }
-  
  if (TEfficiency::CheckConsistency( *hist("passMu20_pT"), *hist("total_pT") ))
     {
       pEff_mu20 = new TEfficiency( *hist("passMu20_pT"), *hist("total_pT") );
       pEff_mu20->SetTitle("HLT_mu20_mu8noL1 Quad pT Efficiency");
       pFile.WriteTObject(pEff_mu20, "pEff_mu20");
     }
-
  if (TEfficiency::CheckConsistency( *hist("passMu22_pT"), *hist("total_pT") ))
     {
       pEff_mu22 = new TEfficiency( *hist("passMu22_pT"), *hist("total_pT") );
       pEff_mu22->SetTitle("HLT_mu22_mu8noL1 Quad pT Efficiency");
       pFile.WriteTObject(pEff_mu22, "pEff_mu22");
     }
- 
   if (TEfficiency::CheckConsistency( *hist("passM14L1_pT"), *hist("total_pT") ))
     {
       pEff_M14L1 = new TEfficiency( *hist("passM14L1_pT"), *hist("total_pT") );
@@ -936,7 +932,6 @@ StatusCode MyxAODAnalysis :: finalize ()
   Dren8.close();
   Dset8.close();
   */
-
   ANA_MSG_INFO( "There are " << m_evtNr << " total events" );
   ANA_MSG_INFO("There are " << chi_1K << " pairs with chi squared > 100.");
   //ANA_MSG_INFO( "There are " << noUpsi << " events with no Upsilon candidate");
@@ -947,9 +942,6 @@ StatusCode MyxAODAnalysis :: finalize ()
   mu22evnt_list.close();
   mu20evnt_list.close();
   M14L1evnt_list.close();
-  
-  hist ("noUpsi_1v2OS")->SetStats(0);
-  hist ("noUpsi_1v2SS")->SetStats(0);
-  
+	
   return StatusCode::SUCCESS;
 }
