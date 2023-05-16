@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+
+# Read the submission directory as a command line argument.
+import optparse
+parser = optparse.OptionParser()
+parser.add_option( '-s', '--submission-dir', dest = 'submission_dir',
+                   action = 'store', type = 'string', default = 'submitDir',
+                   help = 'Submission directory for EventLoop' )
+( options, args ) = parser.parse_args()
+
+# Set up (Py)ROOT.
+import ROOT
+ROOT.xAOD.Init().ignore()
+
+# Set up the sample handler object.
+import os
+sh = ROOT.SH.SampleHandler()
+sh.setMetaString( 'nc_tree', 'CollectionTree' )
+
+#filelistD = ['user.abarton.30705179.EXT0._000001.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000002.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000003.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000004.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000005.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000006.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000007.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000008.DAOD_BPHY4.pool.root', 'user.abarton.30705179.EXT0._000009.DAOD_BPHY4.pool.root']
+
+#filelistA = 
+
+inputFilePath = '/data/bhollo/SampleT2022/'+'/user.abarton.valid1.507665.MGPy8EG_23lo_S4b18p4NJ0_Upsi1S2mu_4mu_3pt2.recon.AOD.e8304_s3775_r13670.BPHY4.1_EXT0/'
+
+ROOT.SH.ScanDir().filePattern( 'user.abarton.30705179.EXT0._000001.DAOD_BPHY4.pool.root' ).scan( sh, inputFilePath )
+"""
+#change the file path and file names once proper data set is obtained
+inputFilePath = '/data/bhollo/SampleT2022/'+'/mc20_13TeV.507665.MGPy8EG_23lo_S4b18p4NJ0_Upsi1S2mu_4mu_3pt2.merge.AOD.e8304_s3681_d1735_r13308_r13307/'
+ROOT.SH.ScanDir().filePattern( 'AOD.27774087._000001.pool.root.1' ).scan( sh, inputFilePath )
+"""
+sh.printContent()
+
+dataType = "mc"
+
+# Create an EventLoop job.
+job = ROOT.EL.Job()
+job.sampleHandler( sh )
+job.options().setDouble( ROOT.EL.Job.optMaxEvents, 70000 )
+job.options().setString( ROOT.EL.Job.optSubmitDirMode, 'unique-link')
+
+
+from MyAnalysis.TriggerAnalysisSequence import makeTriggerAnalysisSequence
+
+algSeq = makeTriggerAnalysisSequence( dataType )
+
+for alg in algSeq:
+
+    job.algsAdd( alg )
+
+"""
+# Add our algorithm to the job
+job.algsAdd( alg)
+"""
+
+# Run the job using the direct driver.
+driver = ROOT.EL.DirectDriver()
+driver.submit( job, options.submission_dir )
+
