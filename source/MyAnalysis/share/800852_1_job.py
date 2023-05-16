@@ -33,20 +33,16 @@ job.sampleHandler( sh )
 job.options().setDouble( ROOT.EL.Job.optMaxEvents, 100000 )
 job.options().setString( ROOT.EL.Job.optSubmitDirMode, 'unique-link')
 
-
+#Add trigger algorithm to jobs
 from MyAnalysis.TriggerAnalysisSequence import makeTriggerAnalysisSequence
-    
 algSeq = makeTriggerAnalysisSequence( dataType )
 
 for alg in algSeq:
     job.algsAdd( alg )
-        
 """
 # Add our algorithm to the job
 job.algsAdd( alg)
-"""
-
-        
+"""     
 # Run the job using the direct driver.
 driver = ROOT.EL.DirectDriver()
 driver.submit( job, options.submission_dir )
