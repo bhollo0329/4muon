@@ -168,11 +168,11 @@ StatusCode MyxAODAnalysis :: initialize ()
   ANA_CHECK( book( TH1D( "X_Mdiff", "X (Quad) Decorator - p4 Invariant Mass", 25, 0, 5)));
   hist ("X_Mdiff")->GetXaxis()->SetTitle("Invariant Mass [GeV]");
 
-  ANA_CHECK( book( TH2D( "X_mResolP", "4-Momentum Invariant Mass Resolution", 60, 15, 25, 25, 0, 5)));
+  ANA_CHECK( book( TH2D( "X_mResolP", "4-Momentum Invariant Mass Resolution", 60, 15, 25, 50, -5, 5)));
   hist ("X_mResolP")->GetXaxis()->SetTitle("4-momentum Invariant Mass [GeV]");
   hist ("X_mResolP")->GetYaxis()->SetTitle("Invariant Mass Difference  [GeV]");
 
-  ANA_CHECK( book( TH2D( "X_mResolD", "Decorator Invariant Mass Resolution", 60, 15, 25, 25, 0, 5)));
+  ANA_CHECK( book( TH2D( "X_mResolD", "Decorator Invariant Mass Resolution", 60, 15, 25, 50, -5, 5)));
   hist ("X_mResolD")->GetXaxis()->SetTitle("Decorator Invariant Mass [GeV]");
   hist ("X_mResolD")->GetYaxis()->SetTitle("Invariant Mass Difference  [GeV]");
 
@@ -200,7 +200,21 @@ StatusCode MyxAODAnalysis :: initialize ()
 
   ANA_CHECK( book( TH1D( "dimuChi", "Muon Pair Chi Squared", 30, 0, 15)));
   hist ("dimuChi")->GetXaxis()->SetTitle("Chi Squared");
-  
+	
+  ANA_CHECK( book( TH1D( "dimu100Chi", "Muon Pair Chi Squared > 100", 999899, 100, 999999)));
+  hist ("dimu100Chi")->GetXaxis()->SetTitle("Chi Squared");
+
+  ANA_CHECK( book( TH1D( "dimu15Chi", "Muon Pair Chi Squared > 15", 999984, 15, 999999)));
+  hist ("dimu15Chi")->GetXaxis()->SetTitle("Chi Squared");
+
+  ANA_CHECK( book( TH2D( "chi_qM100", "Quad Mass vs Chi Squared > 100", 300, 15, 75, 450, 100, 1000)));
+  hist ("chi_qM100")->GetXaxis()->SetTitle("Quad Invariant Mass [GeV]");
+  hist ("chi_qM100")->GetYaxis()->SetTitle("Chi Squared");
+
+  ANA_CHECK( book( TH2D( "chi_qM50", "Quad Mass vs Chi Squared > 50", 300, 15, 75, 475, 50, 1000)));
+  hist ("chi_qM50")->GetXaxis()->SetTitle("Quad Invariant Mass [GeV]");
+  hist ("chi_qM50")->GetYaxis()->SetTitle("Chi Squared");
+
   ANA_CHECK( book( TH1D( "M_2muUpsi", "X (Quad) Invariant Mass Good Quad + Onia + Upsilon(1S) Selection", 60, 15, 25)));
   hist ("M_2muUpsi")->GetXaxis()->SetTitle("Invariant Mass [GeV]");
 
@@ -242,7 +256,6 @@ StatusCode MyxAODAnalysis :: initialize ()
 
   ANA_CHECK( book( TH1D( "X_noUpsiH", "X (Quad) Invariant Mass No Upsilon(1S) Pair > 9.7", 90, 15, 25)));
   hist ("X_noUpsiH")->GetXaxis()->SetTitle("Invariant Mass [GeV]");
-
 
   ANA_CHECK( book( TH1D( "dimu_noUpsi", "Onia Pair Invariant Mass No Upsilon(1S)", 140, 1, 15)));
   hist ("dimu_noUpsi")->GetXaxis()->SetTitle("Invariant Mass [GeV]");
@@ -543,7 +556,17 @@ StatusCode MyxAODAnalysis :: execute ()
 			  if ( qP.chiSquared() > 10 )
 			    {
 			      //ANA_MSG_INFO( qP.chiSquared() ); //print chi squared values
-			      chi_1K += 1;
+                              //chiSquared_list << qP.chiSquared() <<  endl;
+                              //chi_1K += 1;
+                              hist ("dimu15Chi")->Fill( qP.chiSquared() );
+                            }
+                          if ( qP.chiSquared() > 100 )
+                            {
+                              hist ("chi_qM100")->Fill( X_M/1000, qP.chiSquared() );
+                            }
+                          if ( qP.chiSquared() > 50 )
+                            {
+                              hist ("chi_qM50")->Fill( X_M/1000, qP.chiSquared() );
 			    }
 			  if ( qP.chiSquared() < 3 ) //remove pairs
 			    {
